@@ -1,0 +1,8 @@
+# WAF related
+.lock-waf*build
+.waf*/
+build/
+*.pyc
+
+# vim
+*.swp
