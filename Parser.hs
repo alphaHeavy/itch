@@ -5,7 +5,9 @@
 {-# LANGUAGE UnboxedTuples  #-}
 {-# LANGUAGE UnliftedFFITypes #-}
 
-module Parser (ITCHv41(..), parseITCHv41) where
+module Parser (ITCHv41(..), parseITCHv41, cerealITCHv41) where
+
+import Data.Serialize.Get
 
 import GHC.Int
 import GHC.Prim
@@ -43,3 +45,27 @@ parseITCHv41 (Ptr buffer) (W# length) = case parseITCHv41# buffer length of
   (# status, _,      _,     _,        _,      _ #) ->
      OtherMessage  (I64# status) -- insert error handling here
 
+cerealITCHv41 :: Get ITCHv41
+cerealITCHv41 = do
+  msgType <- getWord8
+  case toEnum (fromIntegral msgType) of
+    'E' -> do
+      ns       <- getWord32be
+      refNum   <- getWord64be
+      shares   <- getWord32be
+      matchNum <- getWord64be
+      
+      return $! OrderExecuted (fromIntegral ns) refNum (fromIntegral shares) matchNum
+
+    'C' -> do
+      ns       <- getWord32be
+      refNum   <- getWord64be
+      shares   <- getWord32be
+      matchNum <- getWord64be
+      _        <- getWord8
+      price    <- getWord32be
+      
+      return $! OrderExecutedWithPrice (fromIntegral ns) refNum (fromIntegral shares) matchNum (fromIntegral price)
+
+    _ -> return $! OtherMessage (-2)
+  
