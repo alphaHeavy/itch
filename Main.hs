@@ -90,14 +90,14 @@ ragel = bgroup "primop"
 
 safe :: Benchmark
 safe = bgroup "safe-ffi"
-  [ bench "lotsa" $ bsafeLotsa "E000011111111222233333333"
-  , bench "justOne" $ bsafeJustOne "E000011111111222233333333"
+  [ bench "justOne" $ bsafeJustOne "E000011111111222233333333"
+  , bench "lotsa" $ bsafeLotsa "E000011111111222233333333"
   ]
 
 unsafe :: Benchmark
 unsafe = bgroup "unsafe-ffi"
-  [ bench "lotsa" $ bunsafeLotsa "E000011111111222233333333"
-  , bench "justOne" $ bunsafeJustOne "E000011111111222233333333"
+  [ bench "justOne" $ bunsafeJustOne "E000011111111222233333333"
+  , bench "lotsa" $ bunsafeLotsa "E000011111111222233333333"
   ]
 
 cereal :: Benchmark
@@ -119,5 +119,5 @@ cereal = bgroup "cereal"
   ]
 
 main :: IO ()
-main = defaultMain [ ragel, safe, unsafe, cereal ]
+main = defaultMain [ ragel, unsafe, safe, cereal ]
 
