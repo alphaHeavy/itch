@@ -4,11 +4,13 @@
 
 // foreign import ccall safe "justOne" safeJustOne :: Ptr Word8 -> Ptr JustOne -> IO Bool
 
-void lotsa()
+int lotsa()
 {
+    return 1;
 }
 
-void justOne()
+int justOne()
 {
+    return 1;
 }
 
